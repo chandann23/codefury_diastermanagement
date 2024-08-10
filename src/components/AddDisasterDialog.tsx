@@ -37,7 +37,7 @@ const formSchema = z.object({
   imageUrl: z.string().url("Must be a valid URL").optional(), // Image URL is optional
 });
 
-export function AddDisasterDialog() {
+export function AddDisasterDialog({handleName}: any) {
   const router = useRouter();
   
   // Initialize form with default values and validation
@@ -55,6 +55,7 @@ export function AddDisasterDialog() {
   // Mutation for submitting form data to the API
   const { mutate: onSubmit, data: response } = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
+      handleName(values.name);
       return await axios.post("/api/disasters", values); // Ensure this is your actual API endpoint
     },
     onSuccess: () => {
@@ -71,6 +72,7 @@ export function AddDisasterDialog() {
   const handleSubmit = form.handleSubmit((data) => {
   // Convert date to ISO-8601 DateTime format
   const dateTime = new Date(data.date).toISOString();
+  
   
   // Send the transformed data
   onSubmit({ ...data, date: dateTime });
