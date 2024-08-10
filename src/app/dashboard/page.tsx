@@ -1,10 +1,13 @@
+import React from 'react'
 import { Card } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Textarea } from "~/components/ui/textarea"
 
 export default function Component() {
   return (
     <div className="container mx-auto px-4 py-8">
-      <section className="mb-12 bg-gradient-to-r from-black  to-gray-400 text-white rounded-lg shadow-xl p-8">
+      <section className="mb-12 bg-gradient-to-r from-black to-gray-400 text-white rounded-lg shadow-xl p-8">
         <h1 className="text-4xl font-bold mb-4">DisasterReady: Stay Informed, Stay Safe</h1>
         <p className="text-xl mb-6">
           Welcome to your essential hub for real-time updates on natural disasters worldwide. Our mission is to keep you informed and prepared in the face of nature's most formidable challenges.
@@ -14,6 +17,40 @@ export default function Component() {
           <Button className="bg-transparent border border-white hover:bg-blue-700">Emergency Contacts</Button>
         </div>
       </section>
+
+      {/* Add Disaster button */}
+      <Button 
+        className="mb-6 bg-blue-500 text-white hover:bg-blue-600"
+      >
+        Add Disaster
+      </Button>
+
+      {/* Add Disaster form */}
+      <form className="mb-6 p-4 border rounded-lg">
+        <Input
+          name="title"
+          placeholder="Disaster Title"
+          className="mb-2"
+        />
+        <Textarea
+          name="description"
+          placeholder="Description"
+          className="mb-2"
+        />
+        <Input
+          name="date"
+          placeholder="Date (e.g., 10 December 2022)"
+          className="mb-2"
+        />
+        <Input
+          name="imageUrl"
+          placeholder="Image URL"
+          className="mb-2"
+        />
+        <Button type="submit" className="bg-green-500 text-white hover:bg-green-600">
+          Add Disaster
+        </Button>
+      </form>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="overflow-hidden rounded-lg shadow-lg">
