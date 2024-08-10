@@ -56,6 +56,8 @@ export function AddDisasterDialog({handleName}: any) {
   const { mutate: onSubmit, data: response } = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       handleName(values.name);
+      console.log("onsubmit",values.name);
+      
       return await axios.post("/api/disasters", values); // Ensure this is your actual API endpoint
     },
     onSuccess: () => {
