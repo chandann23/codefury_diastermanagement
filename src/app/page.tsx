@@ -28,7 +28,7 @@ export default function Component() {
                   </Link>
                                <Link
                   href="#"
-                  className="inline-flex items-center text-sm font-medium text-primary hover:underline underline-offset-4"
+                  className="inline-flex items-center text-sm pl-2 font-medium text-primary hover:underline underline-offset-4"
                   prefetch={false}
                 >
                   Learn More <ArrowRightIcon className="ml-1 h-4 w-4" />

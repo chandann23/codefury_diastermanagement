@@ -1,10 +1,49 @@
-import React from 'react'
-import { Card } from "~/components/ui/card"
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Textarea } from "~/components/ui/textarea"
+"use client";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Card } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
+import { AddDisasterDialog } from "~/components/AddDisasterDialog";
 
-export default function Component() {
+// Define the Disaster type
+type Disaster = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  imageUrl: string;
+};
+
+// Create a QueryClient instance
+const queryClient = new QueryClient();
+
+export default function DisasterPage() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <DisasterContent />
+    </QueryClientProvider>
+  );
+}
+
+function DisasterContent() {
+  const { data: disasters, isLoading: isDisastersLoading } = useQuery({
+    queryKey: ["disasters"],
+    queryFn: async () => {
+      const res = await axios.get("/api/disasters");
+      return res.data as Disaster[];
+    },
+    staleTime: 2000,
+    refetchInterval: 2000,
+    refetchIntervalInBackground: true,
+  });
+
+  if (isDisastersLoading) 
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="loader" />
+      </div>
+    );
+
   return (
     <div className="container mx-auto px-4 py-8">
       <section className="mb-12 bg-gradient-to-r from-black to-gray-400 text-white rounded-lg shadow-xl p-8">
@@ -18,162 +57,38 @@ export default function Component() {
         </div>
       </section>
 
-      {/* Add Disaster button */}
-      <Button 
-        className="mb-6 bg-blue-500 text-white hover:bg-blue-600"
-      >
-        Add Disaster
-      </Button>
-
-      {/* Add Disaster form */}
-      <form className="mb-6 p-4 border rounded-lg">
-        <Input
-          name="title"
-          placeholder="Disaster Title"
-          className="mb-2"
-        />
-        <Textarea
-          name="description"
-          placeholder="Description"
-          className="mb-2"
-        />
-        <Input
-          name="date"
-          placeholder="Date (e.g., 10 December 2022)"
-          className="mb-2"
-        />
-        <Input
-          name="imageUrl"
-          placeholder="Image URL"
-          className="mb-2"
-        />
-        <Button type="submit" className="bg-green-500 text-white hover:bg-green-600">
-          Add Disaster
-        </Button>
-      </form>
+      <div className="flex justify-center items-center space-x-3 mb-10 ">
+        <span className="text-2xl font-bold">Add a Disaster at Known Location</span>
+        <AddDisasterDialog />
+      </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="overflow-hidden rounded-lg shadow-lg">
-          <img
-            src="https://utfs.io/f/faf2a6e7-7cfb-4902-90c6-094a236ebe76-u4rab0.png"
-            alt="Disaster Image"
-            className="w-full h-48 object-cover"
-            width="350"
-            height="200"
-            style={{ aspectRatio: "350/200", objectFit: "cover" }}
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold">Flood in City</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              A severe flood has hit the city, causing widespread damage and displacement of residents.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">10 December 2022</p>
-            <Button variant="link" className="mt-4 text-blue-500">
-              Read More
-            </Button>
-          </div>
-        </Card>
-        <Card className="overflow-hidden rounded-lg shadow-lg">
-          <img
-            src="https://utfs.io/f/faf2a6e7-7cfb-4902-90c6-094a236ebe76-u4rab0.png"
-            alt="Disaster Image"
-            className="w-full h-48 object-cover"
-            width="350"
-            height="200"
-            style={{ aspectRatio: "350/200", objectFit: "cover" }}
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold">Wildfire in Forest</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              A massive wildfire has engulfed the forest, leading to significant loss of flora and fauna.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">15 January 2023</p>
-            <Button variant="link" className="mt-4 text-blue-500">
-              Read More
-            </Button>
-          </div>
-        </Card>
-        <Card className="overflow-hidden rounded-lg shadow-lg">
-          <img
-            src="https://utfs.io/f/faf2a6e7-7cfb-4902-90c6-094a236ebe76-u4rab0.png"
-            alt="Disaster Image"
-            className="w-full h-48 object-cover"
-            width="350"
-            height="200"
-            style={{ aspectRatio: "350/200", objectFit: "cover" }}
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold">Earthquake in Region</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              A powerful earthquake has struck the region, resulting in significant structural damage and casualties.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">20 February 2023</p>
-            <Button variant="link" className="mt-4 text-blue-500">
-              Read More
-            </Button>
-          </div>
-        </Card>
-        <Card className="overflow-hidden rounded-lg shadow-lg">
-          <img
-            src="https://utfs.io/f/faf2a6e7-7cfb-4902-90c6-094a236ebe76-u4rab0.png"
-            alt="Disaster Image"
-            className="w-full h-48 object-cover"
-            width="350"
-            height="200"
-            style={{ aspectRatio: "350/200", objectFit: "cover" }}
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold">Hurricane in Coast</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              A devastating hurricane has hit the coastal areas, causing severe damage to infrastructure and homes.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">25 March 2023</p>
-            <Button variant="link" className="mt-4 text-blue-500">
-              Read More
-            </Button>
-          </div>
-        </Card>
-        <Card className="overflow-hidden rounded-lg shadow-lg">
-          <img
-            src="https://utfs.io/f/faf2a6e7-7cfb-4902-90c6-094a236ebe76-u4rab0.png"
-            alt="Disaster Image"
-            className="w-full h-48 object-cover"
-            width="350"
-            height="200"
-            style={{ aspectRatio: "350/200", objectFit: "cover" }}
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold">Tsunami Warning</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              A tsunami warning has been issued for coastal areas following a strong offshore earthquake.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">5 April 2023</p>
-            <Button variant="link" className="mt-4 text-blue-500">
-              Read More
-            </Button>
-          </div>
-        </Card>
-        <Card className="overflow-hidden rounded-lg shadow-lg">
-          <img
-            src="https://utfs.io/f/faf2a6e7-7cfb-4902-90c6-094a236ebe76-u4rab0.png"
-            alt="Disaster Image"
-            className="w-full h-48 object-cover"
-            width="350"
-            height="200"
-            style={{ aspectRatio: "350/200", objectFit: "cover" }}
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold">Volcanic Eruption</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              A dormant volcano has suddenly erupted, prompting evacuations and causing air travel disruptions.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">12 May 2023</p>
-            <Button variant="link" className="mt-4 text-blue-500">
-              Read More
-            </Button>
-          </div>
-        </Card>
+        {disasters?.map((disaster) => (
+          <Card key={disaster.id} className="overflow-hidden rounded-lg shadow-lg">
+            <img
+              src={disaster.imageUrl}
+              alt={disaster.title}
+              className="w-full h-48 object-cover"
+              width="350"
+              height="200"
+              style={{ aspectRatio: "350/200", objectFit: "cover" }}
+            />
+            <div className="p-4">
+              <h3 className="text-lg font-bold">{disaster.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {disaster.description}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {new Date(disaster.date).toLocaleDateString()}
+              </p>
+              <Button variant="link" className="mt-4 text-blue-500">
+                Read More
+              </Button>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
-  )
+  );
 }
+

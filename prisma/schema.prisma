@@ -18,9 +18,19 @@ model Post {
 
     @@index([name])
 }
-model ngo {
+
+
+model Disaster {
     id        Int      @id @default(autoincrement())
     name      String
-    website   String
-    
+    createdAt DateTime @default(now())
+    description String
+    date DateTime
+    location String
+    imageUrl String
+
+
+    @@index([name])
 }
+
+
